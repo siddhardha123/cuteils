@@ -24,18 +24,11 @@ CUTEILS is a collection of simple yet powerful utilities designed to make your d
 Want to explore the code? Clone the repo and get started!
 
 ```bash
-git clone https://github.com/yourusername/cuteils.git
+git clone https://github.com/siddhardha123/cuteils.git
 cd cuteils
 npm install
 npm run dev
 ```
-
----
-
-## 🖼️ Preview
-Visit the live site: [https://cuteils.com](https://cuteils.com)
-
----
 
 ## 🤝 Contributing
 We welcome contributions! Here’s how you can help:
