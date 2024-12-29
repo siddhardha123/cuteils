@@ -19,7 +19,6 @@ export default function ToolCard({ title, description, href }: ToolCardProps) {
                     <h2 className="text-2xl font-semibold mb-2 text-blue-400">{title}</h2>
                     <p className="text-gray-400">{description}</p>
                 </div>
-                <div className="mt-4 text-purple-400 font-medium">Try it out &rarr;</div>
             </motion.div>
         </Link>
     )
