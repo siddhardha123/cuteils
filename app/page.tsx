@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import ToolCard from './components/ToolCard'
 import Search from './components/Search'
-import CommandMenu from './components/Command'
 import { motion } from 'framer-motion'
 
 const tools = [
@@ -43,19 +42,20 @@ export default function Home() {
                     href="https://github.com/siddhardha123/cuteils"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
+                    initial={{opacity: 0, y: -20}}
+                    animate={{opacity: 1, y: 0}}
+                    transition={{duration: 0.5, delay: 0.1}}
                 >
-                    ⭐ Star Us
+                    <iframe
+                        src="https://ghbtns.com/github-btn.html?user=siddhardha123&repo=cuteils&type=star&count=true&size=large"
+                        frameBorder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>
                 </motion.a>
             </div>
             <motion.h1
                 className="text-3xl font-bold mb-4 text-center "
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                initial={{opacity: 0, y: -20}}
+                animate={{opacity: 1, y: 0}}
+                transition={{duration: 0.5}}
             >
                 Tiny tools,Mighty impact
             </motion.h1>
@@ -66,7 +66,6 @@ export default function Home() {
             >
                 <Search onSearch={handleSearch} />
             </motion.div>
-            <CommandMenu />
             <motion.div
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                 initial={{ opacity: 0 }}
