@@ -1,24 +1,20 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import {useEffect, useState} from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { useRouter } from 'next/navigation'
+import {Check, Copy, Home} from 'lucide-react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { ArrowLeft, Copy, Check, Home } from 'lucide-react'
 
-export default function JsonFormatter() {
+export default function JsonCorrector() {
     const [inputJson, setInputJson] = useState('')
-    const [formattedJson, setFormattedJson] = useState('')
+    const [outputJson, setOutputJson] = useState('')
+    const [copied, setCopied] = useState(false)
     const [error, setError] = useState('')
     const [textareaHeight, setTextareaHeight] = useState('12rem')
-    const [copied, setCopied] = useState(false)
     const router = useRouter()
-
-    useEffect(() => {
-        adjustTextareaHeight()
-    }, [inputJson])
 
     const adjustTextareaHeight = () => {
         const lines = inputJson.split('\n').length
@@ -26,64 +22,72 @@ export default function JsonFormatter() {
         setTextareaHeight(newHeight)
     }
 
-    const formatJson = () => {
-        try {
-            const parsedJson = JSON.parse(inputJson)
-            const formatted = JSON.stringify(parsedJson, null, 2)
-            setFormattedJson(formatted)
-            setError('')
-        } catch (error: any) {
-            setFormattedJson('')
-            setError(`Error: ${error.message}`)
-        }
-    }
-
-    const handleBack = () => {
-        setFormattedJson('')
-        setError('')
-    }
-
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(formattedJson).then(() => {
+        navigator.clipboard.writeText(outputJson).then(() => {
             setCopied(true)
             setTimeout(() => setCopied(false), 2000)
         })
     }
 
-    const goToHomePage = () => {
-        router.push('/')
+
+    useEffect(() => {
+        adjustTextareaHeight()
+    }, [inputJson])
+
+    const correctJson = () => {
+        try {
+            // First, try to parse the JSON as-is
+            const parsedJson = JSON.parse(inputJson)
+            setOutputJson(JSON.stringify(parsedJson, null, 2))
+        } catch (error) {
+            // If parsing fails, attempt to correct common issues
+            let correctedJson = inputJson
+                // Replace single quotes with double quotes
+                .replace(/'/g, '"')
+                // Add quotes to unquoted keys
+                .replace(/(\w+):/g, '"$1":')
+                // Remove trailing commas
+                .replace(/,\s*([\]}])/g, '$1')
+
+            try {
+                // Try to parse the corrected JSON
+                const parsedJson = JSON.parse(correctedJson)
+                setOutputJson(JSON.stringify(parsedJson, null, 2))
+            } catch (secondError : any) {
+                // If it still fails, show an error message
+                setError(secondError.message)
+            }
+        }
     }
 
     return (
         <div className="container mx-auto p-4">
             <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold">JSON Formatter</h1>
-                <Button variant="outline" onClick={goToHomePage}>
-                    <Home className="h-4 w-4 mr-2" />
+                <h1 className="text-2xl font-bold">JSON Corrector (Beta)</h1>
+                <Button variant="outline" onClick={() => router.push('/')}>
+                    <Home className="h-4 w-4 mr-2"/>
                     Home
                 </Button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <Textarea
-                        placeholder="Paste your JSON here..."
+                        placeholder="Paste your potentially malformed JSON here..."
                         value={inputJson}
                         onChange={(e) => setInputJson(e.target.value)}
-                        className="w-full font-mono text-sm"
                         style={{ height: textareaHeight }}
                     />
                 </div>
                 <div className="relative">
-                    {formattedJson && (
+                    {outputJson && (
                         <>
                             <div className="absolute top-2 right-2 z-10 flex space-x-2">
                                 <Button
                                     variant="outline"
                                     size="icon"
                                     onClick={copyToClipboard}
-                                    className="bg-white"
                                 >
-                                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                                    {copied ? <Check className="h-4 w-4"/> : <Copy className="h-4 w-4"/>}
                                 </Button>
                             </div>
                             <SyntaxHighlighter
@@ -95,7 +99,7 @@ export default function JsonFormatter() {
                                     borderRadius: '0.375rem',
                                 }}
                             >
-                                {formattedJson}
+                                {outputJson}
                             </SyntaxHighlighter>
                         </>
                     )}
@@ -104,21 +108,19 @@ export default function JsonFormatter() {
                             {error}
                         </div>
                     )}
-                    {!formattedJson && !error && (
+                    {!outputJson && !error && (
                         <div
                             className="bg-gray-100 text-gray-400 p-4 rounded"
-                            style={{ height: textareaHeight }}
+                            style={{height: textareaHeight}}
                         >
                             Formatted JSON will appear here...
                         </div>
                     )}
                 </div>
             </div>
-            <div className="mt-4 flex justify-between">
-                <Button onClick={formatJson} className={formattedJson ? "ml-auto" : ""}>
-                    Format JSON
-                </Button>
-            </div>
+            <Button onClick={correctJson} className="mt-4">
+                Correct JSON
+            </Button>
         </div>
     )
 }

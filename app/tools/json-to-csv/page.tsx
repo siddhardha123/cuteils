@@ -3,10 +3,13 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { useRouter } from 'next/navigation'
+import {Home} from "lucide-react";
 
 export default function JsonToCsv() {
     const [json, setJson] = useState('')
     const [csv, setCsv] = useState('')
+    const router = useRouter()
 
     const convertJsonToCsv = () => {
         // @ts-ignore
@@ -32,7 +35,13 @@ export default function JsonToCsv() {
 
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-4">JSON to CSV Converter</h1>
+            <div className="flex justify-between items-center mb-4" >
+                <h1 className="text-2xl font-bold mb-4">JSON to CSV Converter</h1>
+                <Button variant="outline" onClick={() => router.push('/')}>
+                    <Home className="h-4 w-4 mr-2"/>
+                    Home
+                </Button>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <Textarea

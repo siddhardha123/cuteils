@@ -6,7 +6,9 @@ import Search from './components/Search'
 import { motion } from 'framer-motion'
 
 const tools = [
-    { title: 'JSON to CSV', description: 'Convert JSON data to CSV format', href: '/tools/json-to-csv' }
+    { title: 'JSON to CSV', description: 'Convert JSON data to CSV format', href: '/tools/json-to-csv' },
+    { title: 'JSON Formatter', description: 'Format JSON data', href: '/tools/json-formatter' },
+    { title: 'JSON Corrector', description: 'Correct malformed JSON data', href: '/tools/json-corrector' },
 ]
 
 export default function Home() {
@@ -36,7 +38,7 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    Cuteils
+                    Cuteils 🎀 🛠️
                 </motion.h1>
                 <motion.a
                     href="https://github.com/siddhardha123/cuteils"
@@ -52,12 +54,12 @@ export default function Home() {
                 </motion.a>
             </div>
             <motion.h1
-                className="text-3xl font-bold mb-4 text-center "
+                className="text-2xl font-bold mb-4 text-center "
                 initial={{opacity: 0, y: -20}}
                 animate={{opacity: 1, y: 0}}
                 transition={{duration: 0.5}}
             >
-                Tiny tools,Mighty impact
+                Tiny tools ⚙️, Mighty impact 💥
             </motion.h1>
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
