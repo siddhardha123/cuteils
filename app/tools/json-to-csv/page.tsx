@@ -9,6 +9,7 @@ export default function JsonToCsv() {
     const [csv, setCsv] = useState('')
 
     const convertJsonToCsv = () => {
+        // @ts-ignore
         try {
             const jsonData = JSON.parse(json)
             if (!Array.isArray(jsonData)) {
@@ -24,7 +25,7 @@ export default function JsonToCsv() {
             ]
 
             setCsv(csvRows.join('\n'))
-        } catch (error) {
+        } catch (error : any) {
             setCsv(`Error: ${error.message}`)
         }
     }
