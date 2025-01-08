@@ -1,30 +1,19 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { ArrowLeft, Copy, Check, Home } from 'lucide-react'
+import { Copy, Check, Home } from 'lucide-react'
+import Editor from '@monaco-editor/react'
 
 export default function JsonFormatter() {
     const [inputJson, setInputJson] = useState('')
     const [formattedJson, setFormattedJson] = useState('')
     const [error, setError] = useState('')
-    const [textareaHeight, setTextareaHeight] = useState('12rem')
     const [copied, setCopied] = useState(false)
     const router = useRouter()
 
-    useEffect(() => {
-        adjustTextareaHeight()
-    }, [inputJson])
-
-    const adjustTextareaHeight = () => {
-        const lines = inputJson.split('\n').length
-        const newHeight = `${Math.max(12, Math.min(36, lines * 1.5))}rem`
-        setTextareaHeight(newHeight)
-    }
 
     const formatJson = () => {
         try {
@@ -36,11 +25,6 @@ export default function JsonFormatter() {
             setFormattedJson('')
             setError(`Error: ${error.message}`)
         }
-    }
-
-    const handleBack = () => {
-        setFormattedJson('')
-        setError('')
     }
 
     const copyToClipboard = () => {
@@ -55,7 +39,7 @@ export default function JsonFormatter() {
     }
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="h-[80vh] mx-auto p-4">
             <div className="flex justify-between items-center mb-4">
                 <h1 className="text-2xl font-bold">JSON Formatter</h1>
                 <Button variant="outline" onClick={goToHomePage}>
@@ -63,17 +47,19 @@ export default function JsonFormatter() {
                     Home
                 </Button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+            <div className="h-full grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden">
+                <div className="flex flex-col h-full">
                     <Textarea
                         placeholder="Paste your JSON here..."
                         value={inputJson}
                         onChange={(e) => setInputJson(e.target.value)}
-                        className="w-full font-mono text-sm"
-                        style={{ height: textareaHeight }}
+                        className="w-full font-mono text-sm flex-grow resize-none"
                     />
+                    <Button onClick={formatJson} className="mt-4">
+                        Format JSON
+                    </Button>
                 </div>
-                <div className="relative">
+                <div className="relative h-full">
                     {formattedJson && (
                         <>
                             <div className="absolute top-2 right-2 z-10 flex space-x-2">
@@ -81,22 +67,28 @@ export default function JsonFormatter() {
                                     variant="outline"
                                     size="icon"
                                     onClick={copyToClipboard}
-                                    className="bg-white"
                                 >
                                     {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                                 </Button>
                             </div>
-                            <SyntaxHighlighter
-                                language="json"
-                                style={vscDarkPlus}
-                                customStyle={{
-                                    height: textareaHeight,
-                                    margin: 0,
-                                    borderRadius: '0.375rem',
+                            <Editor
+                                height="100%"
+                                defaultLanguage="json"
+                                value={formattedJson}
+                                theme="vs-dark"
+                                options={{
+                                    readOnly: true,
+                                    minimap: { enabled: false },
+                                    fontSize: 14,
+                                    wordWrap: 'on',
+                                    wrappingIndent: 'deepIndent',
+                                    folding: true,
+                                    foldingStrategy: 'indentation',
+                                    automaticLayout: true,
+                                    lineNumbers: 'on',
+                                    scrollBeyondLastLine: false,
                                 }}
-                            >
-                                {formattedJson}
-                            </SyntaxHighlighter>
+                            />
                         </>
                     )}
                     {error && (
@@ -105,19 +97,11 @@ export default function JsonFormatter() {
                         </div>
                     )}
                     {!formattedJson && !error && (
-                        <div
-                            className="bg-gray-100 text-gray-400 p-4 rounded"
-                            style={{ height: textareaHeight }}
-                        >
+                        <div className="bg-gray-100 text-gray-400 p-4 rounded h-full">
                             Formatted JSON will appear here...
                         </div>
                     )}
                 </div>
-            </div>
-            <div className="mt-4 flex justify-between">
-                <Button onClick={formatJson} className={formattedJson ? "ml-auto" : ""}>
-                    Format JSON
-                </Button>
             </div>
         </div>
     )

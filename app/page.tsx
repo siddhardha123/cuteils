@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import ToolCard from './components/ToolCard'
-import Search from './components/Search'
+import ToolCard from '../components/ToolCard'
+import Search from '../components/Search'
 import { motion } from 'framer-motion'
 
 const tools = [
