@@ -9,6 +9,7 @@ const tools = [
     { title: 'JSON to CSV', description: 'Convert JSON data to CSV format', href: '/tools/json-to-csv' },
     { title: 'JSON Formatter', description: 'Format JSON data', href: '/tools/json-formatter' },
     { title: 'JSON Corrector', description: 'Correct malformed JSON data', href: '/tools/json-corrector' },
+    { title: 'TOTP Generator', description: 'create totps', href: '/tools/totp-generator' },
 ]
 
 export default function Home() {
