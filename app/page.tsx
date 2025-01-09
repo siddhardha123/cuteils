@@ -13,6 +13,7 @@ const tools = [
     { title: 'JSON Corrector', description: 'Correct malformed JSON data', href: '/tools/json-corrector' },
     { title: 'TOTP Generator', description: 'Create Time-Based One-Time Passwords', href: '/tools/totp-generator' },
     { title: 'JWT Parser', description: 'Parse and verify JWT tokens', href: '/tools/jwt-parser' },
+    { title: 'JSON Diff', description: 'Find the difference between two JSON objects', href: '/tools/json-diff' },
 ]
 
 export default function Home() {
