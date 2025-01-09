@@ -39,7 +39,7 @@ export default function TOTPTool() {
                     const totp = new OTPAuth.TOTP({
                         secret: OTPAuth.Secret.fromBase32(cleanedSecret),
                         digits: parseInt(digits),
-                        step: parseInt(period),
+                        period: parseInt(period),
                         algorithm: 'SHA1'
                     })
                     setTotpCode(totp.generate())
