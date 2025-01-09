@@ -10,6 +10,7 @@ const tools = [
     { title: 'JSON Formatter', description: 'Format JSON data', href: '/tools/json-formatter' },
     { title: 'JSON Corrector', description: 'Correct malformed JSON data', href: '/tools/json-corrector' },
     { title: 'TOTP Generator', description: 'create totps', href: '/tools/totp-generator' },
+    { title: 'JWT Parser', description: 'jwt token parse', href: '/tools/jwt-parser' },
 ]
 
 export default function Home() {

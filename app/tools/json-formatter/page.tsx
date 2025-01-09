@@ -97,7 +97,7 @@ export default function JsonFormatter() {
                         </div>
                     )}
                     {!formattedJson && !error && (
-                        <div className="bg-gray-100 text-gray-400 p-4 rounded h-full">
+                        <div className="text-gray-400 p-4 rounded h-full">
                             Formatted JSON will appear here...
                         </div>
                     )}

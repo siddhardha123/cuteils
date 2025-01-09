@@ -110,7 +110,7 @@ export default function JsonCorrector() {
                     )}
                     {!outputJson && !error && (
                         <div
-                            className="bg-gray-100 text-gray-400 p-4 rounded"
+                            className="text-gray-400 p-4 rounded"
                             style={{height: textareaHeight}}
                         >
                             Formatted JSON will appear here...
