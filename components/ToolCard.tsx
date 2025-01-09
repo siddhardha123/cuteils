@@ -16,8 +16,8 @@ export default function ToolCard({ title, description, href }: ToolCardProps) {
                 whileTap={{ scale: 0.95 }}
             >
                 <div>
-                    <h2 className="text-2xl font-semibold mb-2 text-blue-400">{title}</h2>
-                    <p className="text-gray-400">{description}</p>
+                    <h2 className="text-2xl font-semibold mb-2 text-pink-400">{title}</h2>
+                    <p className="text-gray-300">{description}</p>
                 </div>
             </motion.div>
         </Link>
