@@ -14,6 +14,7 @@ const tools = [
     { title: 'TOTP Generator', description: 'Create Time-Based One-Time Passwords', href: '/tools/totp-generator' },
     { title: 'JWT Parser', description: 'Parse and verify JWT tokens', href: '/tools/jwt-parser' },
     { title: 'JSON Diff', description: 'Find the difference between two JSON objects', href: '/tools/json-diff' },
+    { title: 'Time Unit converter', description: 'unit convertions', href: '/tools/time-unit-converter' },
 ]
 
 export default function Home() {
