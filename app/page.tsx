@@ -15,6 +15,7 @@ const tools = [
     { title: 'JWT Parser', description: 'Parse and verify JWT tokens', href: '/tools/jwt-parser' },
     { title: 'JSON Diff', description: 'Find the difference between two JSON objects', href: '/tools/json-diff' },
     { title: 'Time Unit converter', description: 'unit convertions', href: '/tools/time-unit-converter' },
+    { title: 'Time Stamp converter', description: 'convert epoch timestamp to human readable datetime', href: '/tools/timestamp-converter' },
 ]
 
 export default function Home() {
