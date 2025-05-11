@@ -14,7 +14,6 @@ export default function JsonFormatter() {
     const [copied, setCopied] = useState(false)
     const router = useRouter()
 
-
     const formatJson = () => {
         try {
             const parsedJson = JSON.parse(inputJson)
@@ -34,37 +33,33 @@ export default function JsonFormatter() {
         })
     }
 
-    const goToHomePage = () => {
-        router.push('/')
-    }
-
     return (
         <div className="h-[80vh] mx-auto p-4">
-            <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold">JSON Formatter</h1>
-                <Button variant="outline" onClick={goToHomePage}>
+            <div className="flex justify-between items-center mb-8">
+                <h1 className="text-3xl font-bold neo-brutalism-pink px-4 py-2">JSON Formatter</h1>
+                <Button variant="outline" onClick={() => router.push('/')}>
                     <Home className="h-4 w-4 mr-2" />
                     Home
                 </Button>
             </div>
-            <div className="h-full grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden">
-                <div className="flex flex-col h-full">
+            <div className="h-full grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex flex-col h-full space-y-4">
                     <Textarea
                         placeholder="Paste your JSON here..."
                         value={inputJson}
                         onChange={(e) => setInputJson(e.target.value)}
-                        className="w-full font-mono text-sm flex-grow resize-none"
+                        className="flex-grow resize-none font-mono"
                     />
-                    <Button onClick={formatJson} className="mt-4">
+                    <Button onClick={formatJson} className="w-full">
                         Format JSON
                     </Button>
                 </div>
-                <div className="relative h-full">
+                <div className="relative h-full neo-brutalism-white">
                     {formattedJson && (
                         <>
-                            <div className="absolute top-2 right-2 z-10 flex space-x-2">
+                            <div className="absolute top-4 right-4 z-10">
                                 <Button
-                                    variant="outline"
+                                    variant="secondary"
                                     size="icon"
                                     onClick={copyToClipboard}
                                 >
@@ -92,12 +87,12 @@ export default function JsonFormatter() {
                         </>
                     )}
                     {error && (
-                        <div className="text-red-500 bg-red-100 p-4 rounded">
+                        <div className="neo-brutalism bg-red-400 p-4">
                             {error}
                         </div>
                     )}
                     {!formattedJson && !error && (
-                        <div className="text-gray-400 p-4 rounded h-full">
+                        <div className="h-full flex items-center justify-center text-gray-500">
                             Formatted JSON will appear here...
                         </div>
                     )}
@@ -106,4 +101,3 @@ export default function JsonFormatter() {
         </div>
     )
 }
-
