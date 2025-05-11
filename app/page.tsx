@@ -14,8 +14,8 @@ const tools = [
     { title: 'TOTP Generator', description: 'Create Time-Based One-Time Passwords', href: '/tools/totp-generator' },
     { title: 'JWT Parser', description: 'Parse and verify JWT tokens', href: '/tools/jwt-parser' },
     { title: 'JSON Diff', description: 'Find the difference between two JSON objects', href: '/tools/json-diff' },
-    { title: 'Time Unit converter', description: 'unit convertions', href: '/tools/time-unit-converter' },
-    { title: 'Time Stamp converter', description: 'convert epoch timestamp to human readable datetime', href: '/tools/timestamp-converter' },
+    { title: 'Time Unit converter', description: 'Convert between different time units', href: '/tools/time-unit-converter' },
+    { title: 'Time Stamp converter', description: 'Convert epoch timestamp to human readable datetime', href: '/tools/timestamp-converter' },
 ]
 
 export default function Home() {
@@ -37,10 +37,10 @@ export default function Home() {
     if (!mounted) return null
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
+        <div className="min-h-screen bg-[#F5F5F5]">
             <header className="container mx-auto px-4 py-6 flex justify-between items-center">
                 <motion.h1
-                    className="text-3xl font-bold text-pink-600"
+                    className="text-3xl font-bold text-black neo-brutalism-pink px-4 py-2"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
@@ -54,6 +54,7 @@ export default function Home() {
                     initial={{opacity: 0, y: -20}}
                     animate={{opacity: 1, y: 0}}
                     transition={{duration: 0.5, delay: 0.1}}
+                    className="neo-brutalism-white px-4 py-2"
                 >
                     <iframe
                         src="https://ghbtns.com/github-btn.html?user=siddhardha123&repo=cuteils&type=star&count=true&size=large"
@@ -62,10 +63,9 @@ export default function Home() {
             </header>
 
             <main className="container mx-auto px-4 py-12 space-y-24">
-                {/* Hero Section */}
                 <section className="text-center space-y-8">
                     <motion.h2
-                        className="text-5xl font-extrabold text-gray-900"
+                        className="text-5xl font-extrabold text-black"
                         initial={{opacity: 0, y: -20}}
                         animate={{opacity: 1, y: 0}}
                         transition={{duration: 0.5}}
@@ -73,7 +73,7 @@ export default function Home() {
                         Tiny tools ⚙️, Mighty impact 💥
                     </motion.h2>
                     <motion.p
-                        className="text-xl text-gray-600 max-w-2xl mx-auto"
+                        className="text-xl text-gray-700 max-w-2xl mx-auto"
                         initial={{opacity: 0, y: 20}}
                         animate={{opacity: 1, y: 0}}
                         transition={{duration: 0.5, delay: 0.2}}
@@ -91,7 +91,6 @@ export default function Home() {
                     </motion.div>
                 </section>
 
-                {/* Features Section */}
                 <section className="grid grid-cols-1 md:grid-cols-3 gap-12">
                     {[
                         { icon: <Code size={48} />, title: "Open Source", description: "Fully transparent and community-driven. Contribute and make it better!" },
@@ -100,21 +99,20 @@ export default function Home() {
                     ].map((feature, index) => (
                         <motion.div
                             key={feature.title}
-                            className="text-center space-y-4"
+                            className="neo-brutalism-white p-6 text-center space-y-4"
                             initial={{opacity: 0, y: 20}}
                             animate={{opacity: 1, y: 0}}
                             transition={{duration: 0.5, delay: 0.1 * index}}
                         >
-                            <div className="text-pink-500 flex justify-center">{feature.icon}</div>
-                            <h3 className="text-2xl font-semibold text-gray-900">{feature.title}</h3>
-                            <p className="text-gray-600">{feature.description}</p>
+                            <div className="text-black flex justify-center">{feature.icon}</div>
+                            <h3 className="text-2xl font-bold text-black">{feature.title}</h3>
+                            <p className="text-gray-700">{feature.description}</p>
                         </motion.div>
                     ))}
                 </section>
 
-                {/* Tools Section */}
                 <section id="tools" className="space-y-12">
-                    <h2 className="text-3xl font-bold text-center text-pink-500">Our Tools</h2>
+                    <h2 className="text-3xl font-bold text-center text-black neo-brutalism-pink inline-block px-4 py-2 mx-auto">Our Tools</h2>
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -141,14 +139,13 @@ export default function Home() {
                     </motion.div>
                 </section>
 
-                {/* Call to Action */}
                 <section className="text-center space-y-8">
-                    <h2 className="text-3xl font-bold text-gray-900">Ready to simplify your workflow?</h2>
-                    <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                    <h2 className="text-3xl font-bold text-black">Ready to simplify your workflow?</h2>
+                    <p className="text-xl text-gray-700 max-w-2xl mx-auto">
                         Join our growing community of developers who trust Cuteils for their daily tasks.
                     </p>
                     <div className="flex justify-center space-x-4">
-                        <Button size="lg" variant="outline" asChild>
+                        <Button variant="outline" size="lg" asChild>
                             <a href="https://github.com/siddhardha123/cuteils" target="_blank" rel="noopener noreferrer">
                                 <Github className="mr-2 h-4 w-4" /> Star on GitHub
                             </a>
@@ -162,12 +159,11 @@ export default function Home() {
                 </section>
             </main>
 
-            <footer className="bg-gray-100 py-8 mt-24">
-                <div className="container mx-auto px-4 text-center text-gray-600">
+            <footer className="bg-black text-white py-8 mt-24">
+                <div className="container mx-auto px-4 text-center">
                     <p>Made with 💖 by sid.</p>
                 </div>
             </footer>
         </div>
     )
 }
-
