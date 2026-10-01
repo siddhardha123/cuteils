@@ -1,44 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { Search as SearchIcon, X } from 'lucide-react'
 
-interface SearchProps {
-    onSearch: (query: string) => void
-}
-
-export default function Search({ onSearch }: SearchProps) {
-    const [query, setQuery] = useState('')
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        onSearch(query)
-    }
-
-    return (
-        <form onSubmit={handleSubmit} className="mb-8">
-            <motion.div
-                className="relative"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                <input
-                    type="text"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search tools..."
-                    className="w-full p-4 pr-16 neo-brutalism-white bg-white text-black placeholder-gray-500"
-                />
-                <button
-                    type="submit"
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 neo-brutalism-secondary p-2"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </button>
-            </motion.div>
-        </form>
-    )
+export default function Search({ value, onSearch }: { value: string; onSearch: (query: string) => void }) {
+  return (
+    <div className="relative">
+      <SearchIcon className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-500" />
+      <input aria-label="Search tools" type="search" value={value} onChange={event => onSearch(event.target.value)} placeholder="Search tools, e.g. JSON or timestamp..." className="h-14 w-full border-4 border-black bg-white pl-12 pr-14 text-base shadow-[4px_4px_0_0_#000] placeholder:text-stone-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pink-600 [&::-webkit-search-cancel-button]:appearance-none" />
+      {value && <button type="button" aria-label="Clear search" onClick={() => onSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-pink-100 focus-visible:outline-2 focus-visible:outline-pink-600"><X className="h-5 w-5" /></button>}
+    </div>
+  )
 }

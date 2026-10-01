@@ -8,9 +8,9 @@ export const metadata: Metadata = {
     title: 'Cuteils',
     description: 'A collection of useful online tools for developers',
     icons: {
-      icon: './favicon.png',
-      shortcut: './favicon.png',
-      apple: './favicon.png', 
+      icon: '/favicon.png',
+      shortcut: '/favicon.png',
+      apple: '/favicon.png',
     },
   };
 
@@ -22,12 +22,9 @@ export default function RootLayout({
     return (
         <html lang="en">
         <body className={`${inter.className}`}>
-        <main>
             <Analytics />
             {children}
-        </main>
         </body>
         </html>
     )
 }
-
