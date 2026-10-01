@@ -1,116 +1,38 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Clock } from 'lucide-react'
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { CopyButton, ToolError, ToolOutput, ToolPanel } from '@/components/ToolWorkspace'
 
-const timezones = [
-  'UTC',
-  'GMT',
-  'Asia/Kolkata', // IST
-  'America/New_York', // EST/EDT
-  'America/Los_Angeles', // PST/PDT
-  'Europe/Paris', // CET/CEST
-]
+const timezones = ['UTC', 'Asia/Kolkata', 'America/New_York', 'America/Los_Angeles', 'Europe/London', 'Europe/Paris', 'Asia/Tokyo', 'Australia/Sydney']
+const selectClass = 'h-11 w-full border-2 border-black bg-white px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-600'
 
 export default function TimestampConverter() {
-  const [timestamp, setTimestamp] = useState<string>('')
-  const [timezone, setTimezone] = useState<string>('UTC')
-  const [convertedTime, setConvertedTime] = useState<string>('')
-  const [error, setError] = useState<string>('')
-
-  useEffect(() => {
-    convertTimestamp()
-  }, [timestamp, timezone])
-
-  const convertTimestamp = () => {
-    if (!timestamp) {
-      setConvertedTime('')
-      setError('')
-      return
-    }
-
-    const timestampNumber = Number(timestamp)
-    if (isNaN(timestampNumber)) {
-      setError('Invalid timestamp')
-      setConvertedTime('')
-      return
-    }
-
+  const [input, setInput] = useState('')
+  const [unit, setUnit] = useState('seconds')
+  const [timezone, setTimezone] = useState('UTC')
+  let output = '', error = ''
+  if (input.trim()) {
     try {
-      const date = new Date(timestampNumber * 1000) // Convert to milliseconds
-      const options: Intl.DateTimeFormatOptions = {
-        timeZone: timezone,
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        timeZoneName: 'short'
-      }
-      const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date)
-      setConvertedTime(formattedDate)
-      setError('')
-    } catch (err) {
-      setError('Error converting timestamp')
-      setConvertedTime('')
-    }
+      const value = Number(input)
+      if (!Number.isFinite(value)) throw new Error('Invalid timestamp')
+      const date = new Date(value * (unit === 'seconds' ? 1000 : 1))
+      if (Number.isNaN(date.getTime())) throw new Error('Timestamp is outside the supported date range')
+      output = new Intl.DateTimeFormat('en-US', { timeZone: timezone, year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' }).format(date)
+      output += `\n\nISO (UTC): ${date.toISOString()}`
+    } catch (cause) { error = cause instanceof Error ? cause.message : 'Invalid timestamp' }
   }
-
   return (
-    <div className="container mx-auto p-4 max-w-2xl">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold flex items-center justify-center">
-            <Clock className="mr-2" />
-            Timestamp to Time Converter
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="timestamp">Unix Timestamp</Label>
-              <Input
-                id="timestamp"
-                type="number"
-                value={timestamp}
-                onChange={(e) => setTimestamp(e.target.value)}
-                placeholder="Enter Unix timestamp"
-              />
-            </div>
-            <div>
-              <Label htmlFor="timezone">Timezone</Label>
-              <Select value={timezone} onValueChange={setTimezone}>
-                <SelectTrigger id="timezone">
-                  <SelectValue placeholder="Select timezone" />
-                </SelectTrigger>
-                <SelectContent>
-                  {timezones.map((tz) => (
-                    <SelectItem key={tz} value={tz}>
-                      {tz}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <Card>
-              <CardContent className="p-4">
-                <h3 className="text-lg font-semibold mb-2">Converted Time:</h3>
-                {error ? (
-                  <p className="text-red-500">{error}</p>
-                ) : (
-                  <p className="text-2xl font-mono">{convertedTime || 'Enter a timestamp'}</p>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        </CardContent>
-      </Card>
+    <div className="grid items-start gap-6 md:grid-cols-2">
+      <ToolPanel title="Unix timestamp" actions={<><Button variant="ghost" size="sm" onClick={() => setInput(String(unit === 'seconds' ? Math.floor(Date.now() / 1000) : Date.now()))}>Now</Button><Button variant="ghost" size="sm" onClick={() => setInput('')} disabled={!input}>Clear</Button></>}>
+        <div className="space-y-2"><Label htmlFor="timestamp">Timestamp</Label><Input id="timestamp" type="number" value={input} onChange={event => setInput(event.target.value)} placeholder="e.g. 1735689600" /></div>
+        <div className="space-y-2"><Label htmlFor="timestamp-unit">Unit</Label><select id="timestamp-unit" value={unit} onChange={event => setUnit(event.target.value)} className={selectClass}><option value="seconds">Seconds</option><option value="milliseconds">Milliseconds</option></select></div>
+        <div className="space-y-2"><Label htmlFor="timezone">Timezone</Label><select id="timezone" value={timezone} onChange={event => setTimezone(event.target.value)} className={selectClass}>{timezones.map(zone => <option key={zone} value={zone}>{zone}</option>)}</select></div>
+        <ToolError message={error} />
+      </ToolPanel>
+      <ToolPanel title="Date and time" actions={<CopyButton value={output} />}><ToolOutput value={output} placeholder="Enter a timestamp to convert it automatically." /></ToolPanel>
     </div>
   )
 }
-

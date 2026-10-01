@@ -1,138 +1,37 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Clock, ArrowRightLeft } from 'lucide-react'
+import { useState } from 'react'
+import { ArrowRightLeft } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { CopyButton, ToolError, ToolOutput, ToolPanel } from '@/components/ToolWorkspace'
 
-const timeUnits = [
-  { value: 'milliseconds', label: 'Milliseconds' },
-  { value: 'seconds', label: 'Seconds' },
-  { value: 'minutes', label: 'Minutes' },
-  { value: 'hours', label: 'Hours' },
-  { value: 'days', label: 'Days' },
-  { value: 'weeks', label: 'Weeks' },
-  { value: 'months', label: 'Months' },
-  { value: 'years', label: 'Years' },
-]
-
-const conversionFactors: { [key: string]: number } = {
-  milliseconds: 0.001,
-  seconds: 1,
-  minutes: 60,
-  hours: 3600,
-  days: 86400,
-  weeks: 604800,
-  months: 2629746,  // Average month (365.2425 days / 12)
-  years: 31556952,  // Average year (365.2425 days)
-}
+const units = { milliseconds: 0.001, seconds: 1, minutes: 60, hours: 3600, days: 86400, weeks: 604800, months: 2629746, years: 31556952 }
+type Unit = keyof typeof units
+const selectClass = 'h-11 w-full border-2 border-black bg-white px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-600'
 
 export default function TimeUnitConverter() {
-  const [inputValue, setInputValue] = useState<string>('1')
-  const [inputUnit, setInputUnit] = useState<string>('hours')
-  const [outputUnit, setOutputUnit] = useState<string>('minutes')
-  const [result, setResult] = useState<string>('')
-
-  useEffect(() => {
-    convertTime()
-  }, [inputValue, inputUnit, outputUnit])
-
-  const convertTime = () => {
-    const input = parseFloat(inputValue)
-    if (isNaN(input)) {
-      setResult('Invalid input')
-      return
-    }
-
-    const secondsValue = input * conversionFactors[inputUnit]
-    const outputValue = secondsValue / conversionFactors[outputUnit]
-    
-    // Adjust precision based on the output unit
-    const precision = outputUnit === 'milliseconds' ? 3 : 6
-    setResult(outputValue.toFixed(precision))
-  }
-
-  const handleSwapUnits = () => {
-    setInputUnit(outputUnit)
-    setOutputUnit(inputUnit)
-  }
-
+  const [input, setInput] = useState('1')
+  const [from, setFrom] = useState<Unit>('hours')
+  const [to, setTo] = useState<Unit>('minutes')
+  const number = Number(input)
+  const value = number * units[from] / units[to]
+  const error = input.trim() && (!Number.isFinite(number) || !Number.isFinite(value)) ? 'Enter a finite number.' : ''
+  const result = input.trim() && !error ? `${input} ${from} = ${Number(value.toPrecision(12))} ${to}` : ''
   return (
-    <div className="container mx-auto p-4 max-w-2xl">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold flex items-center justify-center">
-            <Clock className="mr-2" />
-            Time Unit Converter
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="input-value">Input Value</Label>
-              <Input
-                id="input-value"
-                type="number"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Enter value"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="input-unit">From</Label>
-              <Select value={inputUnit} onValueChange={setInputUnit}>
-                <SelectTrigger id="input-unit">
-                  <SelectValue placeholder="Select unit" />
-                </SelectTrigger>
-                <SelectContent>
-                  {timeUnits.map((unit) => (
-                    <SelectItem key={unit.value} value={unit.value}>
-                      {unit.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2 md:col-start-2">
-              <Label htmlFor="output-unit">To</Label>
-              <Select value={outputUnit} onValueChange={setOutputUnit}>
-                <SelectTrigger id="output-unit">
-                  <SelectValue placeholder="Select unit" />
-                </SelectTrigger>
-                <SelectContent>
-                  {timeUnits.map((unit) => (
-                    <SelectItem key={unit.value} value={unit.value}>
-                      {unit.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <div className="flex justify-center my-4">
-            <button
-              onClick={handleSwapUnits}
-              className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
-              aria-label="Swap units"
-            >
-              <ArrowRightLeft className="h-6 w-6" />
-            </button>
-          </div>
-          <div className="mt-4">
-            <Card>
-              <CardContent className="p-4">
-                <h3 className="text-lg font-semibold mb-2">Result:</h3>
-                <p className="text-2xl font-mono">
-                  {inputValue} {inputUnit} = {result} {outputUnit}
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </CardContent>
-      </Card>
+    <div className="grid items-start gap-6 md:grid-cols-2">
+      <ToolPanel title="Duration" actions={<Button variant="ghost" size="sm" disabled={!input} onClick={() => setInput('')}>Clear</Button>}>
+        <div className="space-y-2"><Label htmlFor="duration-value">Value</Label><Input id="duration-value" type="number" value={input} onChange={event => setInput(event.target.value)} placeholder="Enter a duration" /></div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2"><Label htmlFor="from-unit">From</Label><select id="from-unit" className={selectClass} value={from} onChange={event => setFrom(event.target.value as Unit)}>{Object.keys(units).map(unit => <option key={unit} value={unit}>{unit[0].toUpperCase() + unit.slice(1)}</option>)}</select></div>
+          <div className="space-y-2"><Label htmlFor="to-unit">To</Label><select id="to-unit" className={selectClass} value={to} onChange={event => setTo(event.target.value as Unit)}>{Object.keys(units).map(unit => <option key={unit} value={unit}>{unit[0].toUpperCase() + unit.slice(1)}</option>)}</select></div>
+        </div>
+        <ToolError message={error} />
+        <Button variant="outline" onClick={() => { setFrom(to); setTo(from) }}><ArrowRightLeft />Swap units</Button>
+        <p className="text-xs text-stone-500">Months and years use averages based on a 365.2425-day year.</p>
+      </ToolPanel>
+      <ToolPanel title="Converted duration" actions={<CopyButton value={result} />}><ToolOutput value={result} placeholder="Enter a value to convert it automatically." /></ToolPanel>
     </div>
   )
 }
-
